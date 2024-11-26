@@ -107,11 +107,11 @@ Automatizar a geração de dados realistas para alimentar um banco de dados Orac
 ### Instruções
 1. **Análise e Visualização**:
    ```bash
-   streamlit run script_analise.py
+   streamlit run Dashboard-streamlit.py
    ```
 2. **Geração e Inserção**:
    ```bash
-   python script_geracao.py --start_date 2024-01-01 --end_date 2024-11-26 -rp 6
+   python SimulaEntradas-sklearn.py --start_date 2024-01-01 --end_date 2024-11-26 -rp 6
    ```
 
 ---
@@ -167,6 +167,7 @@ cx_Oracle.init_oracle_client(lib_dir="/Path/to/Oracle/instantclient")
 ## 🗃 Histórico de Lançamentos
 
 ```markdown
+- **0.2.0** – 26/11/2024: *Dashboard com download de relatórios Excel e PDF com os gráficos.*
 - **0.1.0** – 25/11/2024: *Versão Inicial*
 ```
 
