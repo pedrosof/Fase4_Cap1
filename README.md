@@ -2,8 +2,8 @@
 # FIAP - Faculdade de Informática e Administração Paulista
 [![FIAP Logo](images/logo-fiap.png)](https://www.fiap.com.br)
 
-## Fase 3 Cap 1 – Construindo uma máquina agrícola
-[GitHub](https://github.com/pedrosof/Fase3_Cap1)
+## Fase 4 Cap 1 – Automação e inteligência na FarmTech Solutions
+[GitHub](https://github.com/pedrosof/Fase4_Cap1)
 ### Grupo 10
 
 👨‍🎓 **Integrantes**:
@@ -19,88 +19,110 @@
 
 ---
 
-## 📜 Descrição
+# Documentação: Análise e Geração de Dados para Clima e Solo
 
-O objetivo deste projeto é a criação de um sistema de **monitoramento** e **análise de dados** de sensores de solo e condições climáticas, utilizando duas abordagens complementares: uma para a geração de um **dashboard interativo** e outra para os **cálculos de irrigação**.
+## Descrição Geral
+Este projeto é composto por dois scripts com objetivos complementares:
 
-### Primeiro Código: Python com Dash e R
-Este código utiliza **Python** e a biblioteca **Dash** para criar um **dashboard interativo**, que permite visualizar dados de sensores de solo e condições climáticas. O sistema se conecta a um banco de dados Oracle para obter informações sobre **temperatura**, **umidade**, **pH do solo**, e dados climáticos como **temperatura**, **umidade**, e a **condição climática**. 
-
-O código:
-- Lê as configurações do banco de dados a partir de um arquivo de configuração.
-- Executa uma consulta SQL para combinar dados de sensores e clima.
-- Processa esses dados com **Pandas**.
-- Exibe gráficos interativos no dashboard, que mostram a variação de diferentes variáveis como temperatura e eventos climáticos.
-- Utiliza um script **R** para calcular o volume de água necessário para irrigação e exibe o gráfico gerado no dashboard.
-
-### Segundo Código: R com Análise e Gráficos
-O código em **R** conecta-se ao banco de dados Oracle, carrega dados de sensores de solo e condições climáticas, e calcula o volume de água necessário para irrigação. Ele utiliza ajustes baseados em fatores como **temperatura** e **umidade** para determinar **quando** e **quanto irrigar**.
-
-Após realizar os cálculos, o código gera um gráfico de linha que mostra o volume de água necessário ao longo do tempo, salvando-o como um arquivo **PNG** que pode ser exibido no dashboard do primeiro código.
-
-### Terceiro Código: Script de Geração e Inserção de Dados no Banco de Dados Oracle
-
-Este script gera e insere dados aleatórios de sensores de solo e condições climáticas no banco de dados Oracle. Ele também se conecta à API OpenWeather para buscar condições climáticas reais.
-
-#### Principais Funcionalidades:
-- **Conexão ao Banco de Dados**: Realizada através de cx_Oracle, utilizando configurações carregadas de um arquivo `config.cfg`.
-- **Geração de Datas Aleatórias**: Datas são geradas dentro de um intervalo definido, evitando duplicidades no banco de dados.
-- **Inserção de Dados**:
-  - Na tabela `sensor_data`: Temperatura do solo, umidade, pH e estado dos botões.
-  - Na tabela `condicoes_climaticas`: Temperatura, umidade e clima.
-- **Chamada à API OpenWeather**: Busca condições climáticas reais para a cidade especificada no arquivo de configuração.
-- **Argumentos de Linha de Comando**: Permite personalizar o número de entradas e o intervalo de datas para os dados gerados.
-
-Esse script é útil para testes e simulações de sistemas que monitoram dados agrícolas e climáticos.
-
-### Resumo Conjunto
-
-Os três códigos trabalham juntos para construir um sistema completo de **monitoramento e análise de dados agrícolas**. O **Python** com **Dash** é utilizado para a visualização e interação com o usuário, permitindo a exibição de dados de sensores de solo e condições climáticas em tempo real. O **R** é responsável pelos cálculos detalhados de irrigação, com base nos dados coletados, gerando gráficos que mostram o volume de água necessário ao longo do tempo.
-
-Além disso, o **terceiro código** automatiza a geração e inserção de dados aleatórios no banco de dados Oracle, simulando as leituras dos sensores de solo e as condições climáticas. Ele também se integra com a API **OpenWeather** para obter dados reais de clima, o que enriquece a análise de irrigação e a precisão dos cálculos.
-
-Juntos, esses três códigos formam um sistema robusto e integrado, que facilita a **tomada de decisões sobre a irrigação**, oferecendo uma visão completa dos dados de solo e clima. O sistema também é útil para testes e simulações, ajudando a prever e otimizar o uso de água em diferentes cenários agrícolas.
-
-- **Dados Climáticos**: Obtidos através da API pública [OpenWeather](https://openweathermap.org/).
-- **Dados do Solo**: Capturados por sensores desenvolvidos no site [Wokwi](https://wokwi.com/).
+1. **Análise e Visualização de Dados**: Um aplicativo interativo em **Streamlit** que permite explorar e visualizar dados relacionados a condições climáticas e sensores do solo.
+2. **Geração e Inserção de Dados Simulados**: Um script automatizado que gera dados realistas e os insere em um banco de dados Oracle.
 
 ---
 
-# Resumo do que foi criado no Wokwi
+## Tecnologias Utilizadas
+- **Python**: Linguagem principal do projeto.
+- **Bibliotecas**:
+  - `Streamlit`: Interface web interativa.
+  - `cx_Oracle`: Conexão com banco Oracle.
+  - `scikit-learn`: Modelos de regressão, clusterização e geração de dados simulados.
+  - `Matplotlib` e `Seaborn`: Visualização de dados.
+  - `Pandas` e `NumPy`: Manipulação e análise de dados.
 
-- **Projeto do Sensor**: O projeto do sensor criado está disponível em: [Wokwi Project](https://wokwi.com/projects/412014758291630081).
+---
 
-![Wokwi Sensor](images/wokwi.png)
+## 1. Análise e Visualização de Dados
 
-### Resumo do Circuito
+### Objetivo
+Criar uma interface interativa para explorar:
+- Tendências de temperatura, umidade e pH.
+- Comparações entre dados climáticos e do solo.
+- Clusterização (K-Means) e regressão linear para identificar padrões.
 
-Este circuito simulado no Wokwi inclui os seguintes componentes principais:
+### Funcionalidades
+- **Seleção de Intervalo de Datas**: Filtra os dados com base em datas escolhidas pelo usuário.
+- **Gráficos Gerados**:
+  - **Boxplots**: Comparações de temperatura e umidade (clima vs solo).
+  - **Tendências Temporais**: Temperaturas ao longo do tempo.
+  - **Relações entre Variáveis**:
+    - Precipitação x Umidade.
+    - Distribuição de pH e Umidade.
+  - **Modelos Avançados**:
+    - Regressão Linear (Temperatura x Umidade).
+    - Clusterização K-Means (Umidade e pH no solo).
+  - **Cálculo de Irrigação Diária**: Baseado em variáveis climáticas e do solo.
 
-- **ESP32** programado em **MicroPython**.
-- **Sensores**:
-  - **DHT22** (`dht1`): Sensor de temperatura (20°C) e umidade (20.5%), conectado ao pino **2** do ESP32.
-  - **LDR** (`ldr1`): Sensor de luz com intensidade de **130 lux**, conectado ao pino analógico **34** do ESP32.
-- **LEDs**:
-  - **LED vermelho** (`led1`): Conectado ao resistor de **150Ω** (`r1`) e ao pino **0** do ESP32.
-  - **LED azul** (`led2`): Conectado ao resistor de **90Ω** (`r2`) e ao pino **4** do ESP32.
-  - **LED verde-limão** (`led3`): Conectado ao resistor de **140Ω** (`r3`) e ao pino **25** do ESP32.
-- **Botões**:
-  - **Botão azul** (`btn1`): Conectado ao pino **27** do ESP32.
-  - **Botão verde** (`btn2`): Conectado ao pino **26** do ESP32.
+---
 
-Este resumo destaca os componentes principais do circuito e suas conexões essenciais com a placa ESP32.
+## 2. Geração e Inserção de Dados Simulados
 
-### Resumo do Script
+### Objetivo
+Automatizar a geração de dados realistas para alimentar um banco de dados Oracle com informações de:
+- Temperatura.
+- Umidade.
+- pH.
+- Precipitação.
 
-O script gerado no wokwi monitora **temperatura**, **umidade**, **luminosidade** e o estado de dois botões (P e K) em um sistema embarcado. Ele utiliza sensores como o **DHT22** para coletar dados de temperatura e umidade, e um **LDR** para medir a luminosidade. Além disso, três LEDs indicam o status dessas variáveis:
+### Funcionalidades
+- **Geração de Dados**:
+  - Utiliza `make_regression` para criar valores simulados ajustados a intervalos plausíveis.
+  - Suaviza os valores com média móvel.
+- **Inserção no Banco**:
+  - Dados são inseridos nas tabelas `SENSOR_DATA` e `CONDICOES_CLIMATICAS`.
+- **Configuração via Linha de Comando**:
+  - `--start_date` e `--end_date`: Definem o intervalo de datas.
+  - `-rp`: Define o número de registros por dia.
 
-- **LED de Temperatura (vermelho)**: Acende quando a temperatura ultrapassa o limite definido.
-- **LED de Umidade (verde-limão)**: Acende quando a umidade está abaixo do valor mínimo.
-- **LED de pH (azul)**: Acende quando a luminosidade está fora da faixa ideal.
+---
 
-Os botões **P** e **K** são monitorados e, quando pressionados, exibem o respectivo estado no console.
+## Comparação entre os Scripts
 
-Este sistema é ideal para monitoramento de variáveis ambientais e controle visual com LEDs em aplicações embarcadas.
+| Aspecto               | Análise e Visualização                    | Geração e Inserção                     |
+|-----------------------|-------------------------------------------|----------------------------------------|
+| **Objetivo**          | Explorar e visualizar dados climáticos e do solo. | Gerar e inserir dados simulados.      |
+| **Entrada de Dados**  | Banco de dados Oracle.                    | Geração automática (simulada).         |
+| **Saída de Dados**    | Gráficos e insights interativos.          | Dados inseridos no banco Oracle.       |
+| **Uso de Scikit-learn**| Regressão linear e clusterização.         | Geração de dados com `make_regression`.|
+
+---
+
+## Execução
+
+### Requisitos
+- **Dependências Python**:
+  - `streamlit`, `cx_Oracle`, `pandas`, `numpy`, `scikit-learn`, `matplotlib`, `seaborn`.
+- **Banco de Dados**:
+  - Configurações válidas no arquivo `config/config.cfg`.
+  - Tabelas `SENSOR_DATA` e `CONDICOES_CLIMATICAS` devem estar criadas no Oracle.
+
+### Instruções
+1. **Análise e Visualização**:
+   ```bash
+   streamlit run script_analise.py
+   ```
+2. **Geração e Inserção**:
+   ```bash
+   python script_geracao.py --start_date 2024-01-01 --end_date 2024-11-26 -rp 6
+   ```
+
+---
+
+## Melhorias Futuras
+1. **Análise Avançada**:
+   - Previsão de variáveis climáticas.
+2. **Performance**:
+   - Implementar paginação para grandes volumes de dados.
+3. **Integração**:
+   - Exportação de gráficos e dados para relatórios automatizados.
 
 ---
 
@@ -129,9 +151,8 @@ Para executar o código, siga os passos abaixo:
 ### Scripts Principais:
 
 - **Install.py**: Cria a estrutura do banco de dados.
-- **Dashboard.py**: Exibe gráficos dos dados obtidos.
-- **LigaBomba.R**: Calcula o volume de água necessário para irrigação.
-- **SimulaEntradas.py**: Gera dados para o dia atual e entradas aleatórias para datas anteriores.
+- **Dashboard-streamlit.py**: Exibe gráficos dos dados obtidos.
+- **SimulaEntradas-sklearn.py**: Gera dados para o dia atual e entradas aleatórias para datas anteriores.
 
 ### Configuração:
 
@@ -139,17 +160,6 @@ Para executar o código, siga os passos abaixo:
 2. Configure os arquivos python
 ```python
 cx_Oracle.init_oracle_client(lib_dir="/Path/to/Oracle/instantclient")
-
-RSCRIPT_PATH = "/Path/to/Rscript"
-SCRIPT_R_PATH = "/Path/to/LigaBomba.R"
-GRAPH_PATH = "/Path/to/LigaBomba.png"
-```
-3. Configure os arquivos R
-```r
-GRAPH_PATH <- "/Path/to/LigaBomba.png"
-
-drv <- JDBC(driverClass = "oracle.jdbc.OracleDriver", 
-            classPath = "/Path/to/ojdbc8.jar")
 ```
 
 ---
@@ -157,15 +167,7 @@ drv <- JDBC(driverClass = "oracle.jdbc.OracleDriver",
 ## 🗃 Histórico de Lançamentos
 
 ```markdown
-- **0.9.0** – 20/10/2024: *Volume de Água de Irrigação armazenado em banco de dados*
-- **0.8.0** – 20/10/2024: *Ajuste de Climas e Novos Gráficos no Dashboard*
-- **0.7.0** – 20/10/2024: *Documentação*
-- **0.6.0** – 20/10/2024: *Criação do Simulador de Entradas*
-- **0.5.0** – 20/10/2024: *Crição do script R para volumetria de irrigação*
-- **0.4.0** – 19/10/2024: *Criação do Dashboard*
-- **0.3.0** – 18/10/2024: *Criação do Instalador*
-- **0.2.0** – 18/10/2024: *Criação do Circuito e Script do Wokwi*
-- **0.1.0** – 17/10/2024: *Versão Inicial*
+- **0.1.0** – 25/11/2024: *Versão Inicial*
 ```
 
 ---

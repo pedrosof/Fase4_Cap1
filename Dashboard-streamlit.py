@@ -9,6 +9,13 @@ from sklearn.linear_model import LinearRegression
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 import seaborn as sns
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from PIL import Image
+import tempfile
+import os
+from fpdf import FPDF
 
 # Inicialização do cliente Oracle
 try:
@@ -35,6 +42,40 @@ def conectar_banco():
     dsn_tns = cx_Oracle.makedsn(host, port, service_name=service_name)
     conn = cx_Oracle.connect(user=username, password=password, dsn=dsn_tns)
     return conn
+
+# Função para criar o PDF
+def criar_pdf(buffers_graficos):
+    pdf = FPDF()
+    pdf.set_auto_page_break(auto=True, margin=15)
+
+    temp_files = []  # Lista para rastrear arquivos temporários criados
+
+    try:
+        for buffer in buffers_graficos:
+            buffer.seek(0)
+            image = Image.open(buffer)
+
+            # Salvar a imagem em um arquivo temporário
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_img_file:
+                temp_img_path = temp_img_file.name
+                image.save(temp_img_path, format="PNG")
+                temp_files.append(temp_img_path)
+
+                # Adicionar a imagem ao PDF
+                pdf.add_page()
+                pdf.image(temp_img_path, x=10, y=10, w=190)
+
+        # Salvar o PDF em um buffer de memória
+        pdf_buffer = io.BytesIO()
+        pdf.output(dest="S").encode("latin1")  # Salva o PDF no buffer
+        pdf_buffer.write(pdf.output(dest='S').encode('latin1'))  # Escreve o conteúdo do PDF no buffer
+        pdf_buffer.seek(0)
+        return pdf_buffer
+    finally:
+        # Excluir arquivos temporários
+        for temp_file in temp_files:
+            if os.path.exists(temp_file):
+                os.remove(temp_file)
 
 # Função para carregar os dados das tabelas
 @st.cache_data
@@ -80,6 +121,9 @@ max_date = max(condicoes_climaticas['DATA_COLETA'].max(), sensor_data['READING_D
 start_date = st.sidebar.date_input('Data inicial', min_date, min_value=min_date, max_value=max_date)
 end_date = st.sidebar.date_input('Data final', max_date, min_value=min_date, max_value=max_date)
 
+# Lista para armazenar buffers dos gráficos
+buffers_graficos = []
+
 if start_date > end_date:
     st.sidebar.error('Erro: A data final deve ser posterior à data inicial.')
 else:
@@ -92,13 +136,6 @@ else:
         (sensor_data['READING_DATE'] >= pd.to_datetime(start_date)) &
         (sensor_data['READING_DATE'] <= pd.to_datetime(end_date))
     ]
-
-    # Mostrar os dados filtrados
-    #st.header("Dados das Condições Climáticas (Filtrado)")
-    #st.write(condicoes_climaticas_filtrado.head())
-
-    #st.header("Dados dos Sensores do Solo (Filtrado)")
-    #st.write(sensor_data_filtrado.head())
 
     # Configurar estilo do Seaborn
     sns.set_style('darkgrid')
@@ -113,6 +150,12 @@ else:
     ax1.set_ylabel("Temperatura (°C)")
     st.pyplot(fig1)
 
+    # Salvar gráfico no buffer para o PDF
+    buf1 = io.BytesIO()
+    fig1.savefig(buf1, format="png")
+    buf1.seek(0)
+    buffers_graficos.append(buf1)
+
     # Gráfico 2: Comparação de Umidades - Clima vs Solo
     st.subheader("Comparação de Umidades - Clima vs Solo")
     fig2, ax2 = plt.subplots(figsize=(8, 6))
@@ -122,6 +165,12 @@ else:
     ax2.set_title("Comparação de Umidades", fontsize=16)
     ax2.set_ylabel("Umidade (%)")
     st.pyplot(fig2)
+
+    # Salvar gráfico no buffer para o PDF
+    buf2 = io.BytesIO()
+    fig2.savefig(buf2, format="png")
+    buf2.seek(0)
+    buffers_graficos.append(buf2)
 
     # Gráfico 3: Tendência de Temperatura ao Longo do Tempo - Clima
     st.subheader("Tendência de Temperatura ao Longo do Tempo - Clima")
@@ -134,6 +183,12 @@ else:
     ax3.xaxis.set_major_formatter(mdates.DateFormatter('%d/%m/%Y'))
     fig3.autofmt_xdate()
     st.pyplot(fig3)
+
+    # Salvar gráfico no buffer para o PDF
+    buf3 = io.BytesIO()
+    fig3.savefig(buf3, format="png")
+    buf3.seek(0)
+    buffers_graficos.append(buf3)
 
     # Gráfico 4: Relação entre Precipitação e Umidade no Clima
     st.subheader("Precipitação x Umidade no Clima")
@@ -149,6 +204,12 @@ else:
         ax4.text(0.5, 0.5, 'Dados insuficientes para plotar', horizontalalignment='center', verticalalignment='center')
     st.pyplot(fig4)
 
+    # Salvar gráfico no buffer para o PDF
+    buf4 = io.BytesIO()
+    fig4.savefig(buf4, format="png")
+    buf4.seek(0)
+    buffers_graficos.append(buf4)
+
     # Gráfico 5: Distribuição de pH e Umidade no Solo
     st.subheader("Distribuição de pH e Umidade no Solo")
     fig5, ax5 = plt.subplots(figsize=(8, 6))
@@ -158,6 +219,12 @@ else:
     ax5.set_ylabel("Umidade (%)")
     fig5.colorbar(scatter, ax=ax5, label='Umidade (%)')
     st.pyplot(fig5)
+
+    # Salvar gráfico no buffer para o PDF
+    buf5 = io.BytesIO()
+    fig5.savefig(buf5, format="png")
+    buf5.seek(0)
+    buffers_graficos.append(buf5)
 
     # Gráfico 6: Regressão Linear - Temperatura vs Umidade no Clima
     st.subheader("Regressão Linear - Temperatura vs Umidade no Clima")
@@ -179,6 +246,12 @@ else:
         st.pyplot(fig6)
     else:
         st.warning("Dados insuficientes no intervalo selecionado para regressão linear.")
+
+    # Salvar gráfico no buffer para o PDF
+    buf6 = io.BytesIO()
+    fig6.savefig(buf6, format="png")
+    buf6.seek(0)
+    buffers_graficos.append(buf6)
 
     # Gráfico 7: Clusterização K-Means - Umidade e pH no Solo
     st.subheader("Clusterização K-Means - Umidade e pH no Solo")
@@ -205,6 +278,13 @@ else:
         ax7.set_ylabel("pH")
         fig7.colorbar(scatter, ax=ax7, label="Cluster")
         st.pyplot(fig7)
+
+        # Salvar gráfico no buffer para o PDF
+        buf7 = io.BytesIO()
+        fig7.savefig(buf7, format="png")
+        buf7.seek(0)
+        buffers_graficos.append(buf7)
+        
     else:
         st.warning("Dados insuficientes no intervalo selecionado para clusterização.")
 
@@ -261,8 +341,49 @@ else:
         ax8.tick_params(axis="x", rotation=45)
         ax8.legend()
         st.pyplot(fig8)
+            
+        # Salvar gráfico no buffer para o PDF
+        buf8 = io.BytesIO()
+        fig8.savefig(buf8, format="png")
+        buf8.seek(0)
+        buffers_graficos.append(buf8)
+
     else:
         st.warning("Dados insuficientes para calcular a irrigação diária.")
 
     # Fim do app
     st.success("Análises concluídas!")
+
+    # Gerar o relatório em formato CSV com os dados filtrados
+    if not condicoes_climaticas_filtrado.empty and not sensor_data_filtrado.empty:
+        # Combinar os dados filtrados em um único DataFrame
+        relatorio = pd.merge(
+            condicoes_climaticas_filtrado[["DATA_COLETA", "TEMPERATURA", "UMIDADE", "PRECIPITATION"]],
+            sensor_data_filtrado[["READING_DATE", "TEMPERATURE", "HUMIDITY", "PH_VALUE"]],
+            left_on="DATA_COLETA",
+            right_on="READING_DATE",
+            how="inner"
+        )
+
+        # Converter o DataFrame para Excel
+        excel_buffer = io.BytesIO()
+        relatorio.to_excel(excel_buffer, index=False, engine="xlsxwriter")
+        excel_buffer.seek(0)
+
+        # Adicionar o botão de download para o arquivo Excel
+        st.sidebar.download_button(
+            label="Baixar Relatório (Excel)",
+            data=excel_buffer,
+            file_name="relatorio_clima_solo.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        )
+
+        # Gerar PDF e adicionar botão no Streamlit
+        if buffers_graficos:
+            pdf_buffer = criar_pdf(buffers_graficos)
+            st.sidebar.download_button(
+                label="Baixar Relatório PDF",
+                data=pdf_buffer,
+                file_name="relatorio_graficos.pdf",
+                mime="application/pdf"
+            )
