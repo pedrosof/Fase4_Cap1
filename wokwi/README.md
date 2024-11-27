@@ -2,10 +2,7 @@
 [![FIAP Logo](../images/logo-fiap.png)](https://www.fiap.com.br)
 
 ## Fase 4 Cap 1 – Automação e inteligência na FarmTech Solutions
-[GitHub](https://github.com/pedrosof/Fase4_Cap1)
-
-## Link do Projeto no WokWi
-[Wokwi](https://wokwi.com/projects/415711477314913281)
+[GitHub](https://github.com/pedrosof/Fase4_Cap1) [Wokwi](https://wokwi.com/projects/415711477314913281)
 
 ### Grupo 15
 
