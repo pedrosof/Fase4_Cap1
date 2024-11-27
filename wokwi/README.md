@@ -76,7 +76,7 @@ Este código realiza o monitoramento de três variáveis ambientais (temperatura
 
 ## Exemplo de Saída do Monitor Serial:
 
-[![IoT](../IoT.png)]
+[![IoT](IoT.png)]
 
 ## Funcionamento:
 
