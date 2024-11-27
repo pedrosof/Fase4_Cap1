@@ -4,7 +4,7 @@
 
 ## Fase 4 Cap 1 – Automação e inteligência na FarmTech Solutions
 [GitHub](https://github.com/pedrosof/Fase4_Cap1)
-### Grupo 10
+### Grupo 15
 
 👨‍🎓 **Integrantes**:
 - [Fabio Marcos Pedroso Filho](https://www.linkedin.com/in/pedrosof/)
@@ -126,7 +126,7 @@ Automatizar a geração de dados realistas para alimentar um banco de dados Orac
 
 ---
 
-[Video do Funcionamento no Youtube](https://youtu.be/RNyyCE6V7ow)
+[Video do Funcionamento no Youtube](https://youtu.be/baq7eUIWIZs)
 
 ---
 

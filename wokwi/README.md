@@ -3,6 +3,10 @@
 
 ## Fase 4 Cap 1 – Automação e inteligência na FarmTech Solutions
 [GitHub](https://github.com/pedrosof/Fase4_Cap1)
+
+## Link do Projeto no WokWi
+[Wokwi]](https://wokwi.com/projects/415711477314913281)
+
 ### Grupo 15
 
 👨‍🎓 **Integrantes**:
@@ -76,7 +80,7 @@ Este código realiza o monitoramento de três variáveis ambientais (temperatura
 
 ## Exemplo de Saída do Monitor Serial:
 
-[![IoT](IoT.png)]
+![IoT](IoT.png)
 
 ## Funcionamento:
 
