@@ -5,7 +5,7 @@
 [GitHub](https://github.com/pedrosof/Fase4_Cap1)
 
 ## Link do Projeto no WokWi
-[Wokwi]](https://wokwi.com/projects/415711477314913281)
+[Wokwi](https://wokwi.com/projects/415711477314913281)
 
 ### Grupo 15
 
